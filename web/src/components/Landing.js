@@ -1,68 +1,109 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Sparkles, ShieldCheck, MessagesSquare } from 'lucide-react';
+import { ArrowRight, MessagesSquare, ShieldCheck } from 'lucide-react';
+import { appTheme } from '../theme';
 
 const Landing = () => {
   const navigate = useNavigate();
 
+  const primaryButton = {
+    background: appTheme.button,
+    color: '#fff',
+    border: 'none',
+    padding: '14px 20px',
+    borderRadius: '14px',
+    fontWeight: '700',
+    cursor: 'pointer',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '8px',
+  };
+
+  const secondaryButton = {
+    background: '#fff',
+    color: appTheme.primary,
+    border: `1px solid ${appTheme.border}`,
+    padding: '14px 20px',
+    borderRadius: '14px',
+    fontWeight: '700',
+    cursor: 'pointer',
+  };
+
+  const featureCard = {
+    padding: '22px',
+    borderRadius: '20px',
+    background: '#fff',
+    border: `1px solid ${appTheme.border}`,
+    boxShadow: appTheme.shadowSoft,
+  };
+
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(155deg, #0E456F 0%, #1B6B88 48%, #63CABB 100%)', fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif', padding: '28px' }}>
-      <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
+    <div style={{ minHeight: '100vh', background: appTheme.background, padding: '28px', fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif' }}>
+      <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-          <img src={process.env.PUBLIC_URL + '/citu-logo.png'} alt="Kin Logo" style={{ width: '138px', height: 'auto' }} />
+          <img src={process.env.PUBLIC_URL + '/citu-logo.png'} alt="Kin Logo" style={{ width: '110px', height: 'auto' }} />
         </div>
 
-        <div style={{ background: 'rgba(255,255,255,0.94)', border: '1px solid rgba(255,255,255,0.92)', borderRadius: '40px', boxShadow: '0 30px 80px rgba(15,23,42,0.18)', backdropFilter: 'blur(24px)', overflow: 'hidden' }}>
-          <div style={{ padding: '56px 48px', display: 'grid', gridTemplateColumns: '1.25fr 0.95fr', gap: '34px', alignItems: 'stretch' }}>
-            <div>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '999px', background: 'rgba(15,76,129,0.1)', color: '#1A5F7A', fontWeight: '700', marginBottom: '20px' }}>
-                <Sparkles size={16} /> Student support, thoughtfully designed
-              </div>
-              <h1 style={{ fontSize: '4.4rem', lineHeight: 0.98, letterSpacing: '-0.05em', margin: '0 0 18px', color: '#0F172A' }}>KIN helps students borrow, connect, and support one another.</h1>
-              <p style={{ fontSize: '18px', lineHeight: 1.75, color: '#475569', maxWidth: '680px', margin: '0 0 28px' }}>
-                Request essential items, explore current community posts, and communicate directly with fellow students through a clean and approachable campus platform.
-              </p>
-
-              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', marginBottom: '34px' }}>
-                <button onClick={() => navigate('/login')} style={{ background: 'linear-gradient(135deg, #0F4C81 0%, #1A5F7A 58%, #57C5B6 100%)', color: 'white', border: 'none', padding: '16px 22px', borderRadius: '18px', fontWeight: '800', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', boxShadow: '0 18px 36px rgba(15,76,129,0.18)' }}>
-                  Log In <ArrowRight size={18} />
-                </button>
-                <button onClick={() => navigate('/register')} style={{ background: 'rgba(255,255,255,0.86)', color: '#1A5F7A', border: '1px solid #D9E5F0', padding: '16px 22px', borderRadius: '18px', fontWeight: '800', cursor: 'pointer' }}>
-                  Create Account
-                </button>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: '14px' }}>
-                <div style={{ padding: '18px', borderRadius: '24px', background: 'rgba(248,250,252,0.86)', border: '1px solid #E2E8F0' }}>
-                  <MessagesSquare size={20} color="#1A5F7A" />
-                  <h3 style={{ margin: '14px 0 8px', color: '#0F172A' }}>Direct messages</h3>
-                  <p style={{ margin: 0, color: '#64748B', lineHeight: 1.6 }}>Connect with fellow students quickly once someone is ready to assist.</p>
-                </div>
-                <div style={{ padding: '18px', borderRadius: '24px', background: 'rgba(248,250,252,0.86)', border: '1px solid #E2E8F0' }}>
-                  <ShieldCheck size={20} color="#1A5F7A" />
-                  <h3 style={{ margin: '14px 0 8px', color: '#0F172A' }}>Student identity</h3>
-                  <p style={{ margin: 0, color: '#64748B', lineHeight: 1.6 }}>Your profile helps make every request and conversation more personal and trustworthy.</p>
-                </div>
-              </div>
-            </div>
-
-            <div style={{ background: 'linear-gradient(160deg, #F4FAFF 0%, #EEF7F9 100%)', color: '#0F172A', borderRadius: '34px', padding: '28px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 18px 34px rgba(15,76,129,0.08)', border: '1px solid rgba(226,232,240,0.9)' }}>
+        <div style={{ background: '#ffffff', border: `1px solid ${appTheme.border}`, borderRadius: '28px', boxShadow: appTheme.shadow, overflow: 'hidden' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.25fr 0.85fr', gap: '0', minHeight: 'min(720px, calc(100vh - 160px))' }}>
+            <section style={{ padding: '56px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
-                <p style={{ margin: 0, opacity: 0.76, textTransform: 'uppercase', letterSpacing: '0.14em', fontSize: '12px', color: '#64748B' }}>Why students use KIN</p>
-                <h2 style={{ margin: '12px 0 0', fontSize: '2rem', lineHeight: 1.1 }}>A more organized way to ask for help and respond with care.</h2>
+                <div style={{ display: 'inline-flex', padding: '7px 12px', borderRadius: '999px', background: appTheme.cardAlt, color: appTheme.primary, fontSize: '12px', fontWeight: '700', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '22px' }}>
+                  Campus utility system
+                </div>
+                <h1 style={{ margin: 0, fontSize: '3.8rem', lineHeight: 1, letterSpacing: '-0.05em', color: appTheme.text, maxWidth: '720px' }}>
+                  Borrowing and student support, handled with clarity.
+                </h1>
+                <p style={{ margin: '20px 0 0', maxWidth: '620px', fontSize: '18px', lineHeight: 1.7, color: appTheme.textMuted }}>
+                  KIN gives students a focused space to request essentials, review active posts, and continue conversations without unnecessary friction.
+                </p>
+
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '28px' }}>
+                  <button onClick={() => navigate('/login')} style={primaryButton}>
+                    Log In <ArrowRight size={18} />
+                  </button>
+                  <button onClick={() => navigate('/register')} style={secondaryButton}>
+                    Create Account
+                  </button>
+                </div>
               </div>
-              <div style={{ display: 'grid', gap: '12px' }}>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', marginTop: '32px' }}>
+                <div style={featureCard}>
+                  <MessagesSquare size={18} color={appTheme.primary} />
+                  <h3 style={{ margin: '14px 0 8px', color: appTheme.text, fontSize: '1rem' }}>Focused conversations</h3>
+                  <p style={{ margin: 0, color: appTheme.textMuted, lineHeight: 1.6 }}>Move from request to direct coordination in one place.</p>
+                </div>
+                <div style={featureCard}>
+                  <ShieldCheck size={18} color={appTheme.primary} />
+                  <h3 style={{ margin: '14px 0 8px', color: appTheme.text, fontSize: '1rem' }}>Clear identity</h3>
+                  <p style={{ margin: 0, color: appTheme.textMuted, lineHeight: 1.6 }}>Profiles stay consistent across posts, messages, and settings.</p>
+                </div>
+              </div>
+            </section>
+
+            <aside style={{ background: '#f8fafc', borderLeft: `1px solid ${appTheme.border}`, padding: '48px 36px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <p style={{ margin: 0, color: appTheme.textSoft, fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+                  Why KIN
+                </p>
+                <h2 style={{ margin: '12px 0 0', fontSize: '2rem', lineHeight: 1.15, color: appTheme.text }}>
+                  A more formal, organized way to ask and respond.
+                </h2>
+              </div>
+
+              <div style={{ display: 'grid', gap: '12px', marginTop: '28px' }}>
                 {[
-                  'Borrow requests are easier to read and respond to.',
-                  'Messages can begin directly from the community hub.',
-                  'Your profile remains visible across posts, chats, and settings.'
+                  'Requests remain readable and easy to scan.',
+                  'The current activity is visible without extra clutter.',
+                  'Messages stay connected to the original request.',
                 ].map((text) => (
-                  <div key={text} style={{ padding: '16px 18px', borderRadius: '20px', background: 'rgba(15,76,129,0.06)', border: '1px solid rgba(226,232,240,0.9)', lineHeight: 1.6, color: '#475569' }}>
+                  <div key={text} style={{ padding: '16px 18px', borderRadius: '18px', background: '#fff', border: `1px solid ${appTheme.border}`, color: appTheme.textMuted, lineHeight: 1.6 }}>
                     {text}
                   </div>
                 ))}
               </div>
-            </div>
+            </aside>
           </div>
         </div>
       </div>

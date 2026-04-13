@@ -7,4 +7,4 @@ const supabaseUrl = 'https://himriwatwjoabvpzzjim.supabase.co';
 const supabaseAnonKey = 'sb_publishable_avQuq9snkFnPG6yODahc2A_-nziyS3H'; 
 
 // SINGLETON PATTERN: Ensuring only one instance of the Supabase client exists
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);

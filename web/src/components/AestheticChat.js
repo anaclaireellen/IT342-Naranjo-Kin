@@ -191,8 +191,6 @@ const AestheticChat = ({ colors, userName, initialRecipient = '', requestContext
 
   useEffect(() => {
     fetchContacts();
-    const results = SearchStrategies.byUsername(data, searchQuery);
-setSearchResults(results);
   }, [userName, initialRecipient]);
 
   useEffect(() => {
@@ -266,7 +264,7 @@ setSearchResults(results);
       return;
     }
 
-    setSearchResults(contacts.filter((contact) => contact.name.toLowerCase().includes(query)));
+    setSearchResults(SearchStrategies.byUsername(contacts, query));
   }, [contacts, searchQuery]);
 
   const latestDealMessage = [...messages]
@@ -408,23 +406,23 @@ setSearchResults(results);
       height: '100%',
       minHeight: 0,
       background: appTheme.card,
-      borderRadius: '32px',
+      borderRadius: '24px',
       overflow: 'hidden',
-      border: '1px solid rgba(226,232,240,0.9)',
+      border: `1px solid ${appTheme.border}`,
       boxShadow: appTheme.shadow
     },
     sidebar: {
       width: '340px',
       minHeight: 0,
-      background: 'linear-gradient(180deg, #F7FBFF 0%, #F1F8FA 100%)',
-      borderRight: '1px solid #E8EEF6',
+      background: '#f8fafc',
+      borderRight: `1px solid ${appTheme.border}`,
       display: 'flex',
       flexDirection: 'column'
     },
     avatar: (bg) => ({
       width: '46px',
       height: '46px',
-      borderRadius: '16px',
+      borderRadius: '14px',
       background: bg || colors.primary,
       display: 'flex',
       alignItems: 'center',
@@ -432,17 +430,17 @@ setSearchResults(results);
       color: 'white',
       fontWeight: '700',
       overflow: 'hidden',
-      boxShadow: '0 10px 18px rgba(15, 23, 42, 0.08)'
+      boxShadow: 'none'
     }),
     inputWrapper: {
       flex: 1,
       display: 'flex',
       alignItems: 'center',
       background: '#FFFFFF',
-      borderRadius: '18px',
+      borderRadius: '14px',
       padding: '0 15px',
       height: '52px',
-      border: '1px solid #E2E8F0'
+      border: `1px solid ${appTheme.border}`
     },
     inputField: {
       flex: 1,
@@ -461,8 +459,8 @@ setSearchResults(results);
         <div style={{ padding: '28px 24px 22px', position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
             <div>
-              <p style={{ margin: '0 0 4px 0', fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#94A3B8' }}>Direct messages</p>
-              <h2 style={{ margin: 0, fontSize: '26px', fontWeight: '800', color: '#0F172A' }}>Messages</h2>
+              <p style={{ margin: '0 0 4px 0', fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', color: appTheme.textSoft }}>Direct messages</p>
+              <h2 style={{ margin: 0, fontSize: '24px', fontWeight: '700', color: appTheme.text }}>Messages</h2>
             </div>
             <button onClick={() => setIsSearching(!isSearching)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: colors.primary }}>
               {isSearching ? <X size={18} /> : <UserPlus size={20} />}
@@ -480,7 +478,7 @@ setSearchResults(results);
           </div>
 
           {isSearching && searchResults.length > 0 && (
-            <div style={{ position: 'absolute', top: '126px', width: '292px', background: 'white', borderRadius: '16px', boxShadow: '0 20px 36px rgba(15,23,42,0.12)', zIndex: 10, overflow: 'hidden', border: '1px solid #E2E8F0' }}>
+            <div style={{ position: 'absolute', top: '126px', width: '292px', background: 'white', borderRadius: '14px', boxShadow: '0 16px 24px rgba(15,23,42,0.08)', zIndex: 10, overflow: 'hidden', border: `1px solid ${appTheme.border}` }}>
               {searchResults.map((contact) => (
                 <div key={contact.id} onClick={() => { setSelected(contact); setIsSearching(false); }} style={{ padding: '12px 15px', cursor: 'pointer', borderBottom: '1px solid #F8FAFC' }}>
                   <span style={{ fontSize: '14px', fontWeight: '600' }}>{getDisplayNameLabel(contact.name)}</span>
@@ -492,7 +490,7 @@ setSearchResults(results);
 
         <div className="kin-scrollbar" style={{ flex: 1, overflowY: 'auto' }}>
           {contacts.map((contact) => (
-            <div key={contact.id} onClick={() => setSelected(contact)} style={{ padding: '14px 22px', cursor: 'pointer', display: 'flex', gap: '12px', alignItems: 'center', background: selected?.name === contact.name ? 'rgba(226,232,240,0.5)' : 'transparent', borderLeft: selected?.name === contact.name ? `3px solid ${colors.primary}` : '3px solid transparent' }}>
+            <div key={contact.id} onClick={() => setSelected(contact)} style={{ padding: '14px 22px', cursor: 'pointer', display: 'flex', gap: '12px', alignItems: 'center', background: selected?.name === contact.name ? '#eef2f7' : 'transparent', borderLeft: selected?.name === contact.name ? `2px solid ${colors.primary}` : '2px solid transparent' }}>
               <div style={modernStyles.avatar(contact.name === 'Admin Office' ? colors.primary : colors.accent)}>
                 {(profileMap[contact.name]?.profilePic || contact.avatarPic || getCachedProfileByUsername(contact.name)?.profilePic) ? <img src={profileMap[contact.name]?.profilePic || contact.avatarPic || getCachedProfileByUsername(contact.name)?.profilePic} alt={contact.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : contact.initial}
               </div>
@@ -500,17 +498,16 @@ setSearchResults(results);
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                   <span style={{ fontWeight: '700', fontSize: '14px' }}>{getDisplayNameLabel(contact.name)}</span>
                   {contact.attentionLabel && (
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 8px', borderRadius: '999px', background: 'rgba(239,68,68,0.12)', color: '#DC2626', fontSize: '10px', fontWeight: '800', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                      <span style={{ width: '7px', height: '7px', borderRadius: '999px', background: '#DC2626', boxShadow: '0 0 0 4px rgba(239,68,68,0.12)' }} />
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 8px', borderRadius: '999px', background: '#eef2f7', color: appTheme.primary, fontSize: '10px', fontWeight: '700', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                      <span style={{ width: '7px', height: '7px', borderRadius: '999px', background: appTheme.primary }} />
                       {contact.attentionLabel}
                     </span>
                   )}
                 </div>
-                <div style={{ marginTop: '5px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: onlineUsers[contact.name] ? '#059669' : '#94A3B8', fontWeight: '700' }}>
-                  <span style={{ width: '8px', height: '8px', borderRadius: '999px', background: onlineUsers[contact.name] ? '#10B981' : '#CBD5E1', boxShadow: onlineUsers[contact.name] ? '0 0 0 4px rgba(16,185,129,0.12)' : 'none', flexShrink: 0 }} />
-                  {onlineUsers[contact.name] ? 'Online' : 'Offline'}
+                <div style={{ marginTop: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '999px', background: onlineUsers[contact.name] ? '#10B981' : '#CBD5E1', flexShrink: 0 }} />
+                  <p style={{ margin: 0, fontSize: '12px', color: appTheme.textSoft, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{contact.preview}</p>
                 </div>
-                <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#94A3B8', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{contact.preview}</p>
               </div>
               <ChevronRight size={16} color="#CBD5E1" />
             </div>
@@ -521,16 +518,15 @@ setSearchResults(results);
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}>
         {selected ? (
           <>
-            <header style={{ minHeight: '82px', padding: '0 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #EDF2F7', background: appTheme.card, backdropFilter: 'blur(16px)' }}>
+            <header style={{ minHeight: '82px', padding: '0 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1px solid ${appTheme.border}`, background: appTheme.card }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={modernStyles.avatar(colors.primary)}>
                   {(profileMap[selected.name]?.profilePic || selected.avatarPic || getCachedProfileByUsername(selected.name)?.profilePic) ? <img src={profileMap[selected.name]?.profilePic || selected.avatarPic || getCachedProfileByUsername(selected.name)?.profilePic} alt={selected.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : selected.name[0]}
                 </div>
                 <div>
-                  <h4 style={{ margin: 0, fontSize: '18px', color: '#0F172A' }}>{getDisplayNameLabel(selected.name)}</h4>
-                  <div style={{ marginTop: '6px', display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: isSelectedOnline ? '#059669' : '#94A3B8', fontWeight: '700' }}>
-                    <span style={{ width: '8px', height: '8px', borderRadius: '999px', background: isSelectedOnline ? '#10B981' : '#CBD5E1', boxShadow: isSelectedOnline ? '0 0 0 4px rgba(16,185,129,0.12)' : 'none' }} />
-                    {isSelectedOnline ? 'Online now' : 'Offline'}
+                  <h4 style={{ margin: 0, fontSize: '18px', color: appTheme.text }}>{getDisplayNameLabel(selected.name)}</h4>
+                  <div style={{ marginTop: '6px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ width: '8px', height: '8px', borderRadius: '999px', background: isSelectedOnline ? '#10B981' : '#CBD5E1' }} />
                   </div>
                 </div>
               </div>
@@ -539,21 +535,21 @@ setSearchResults(results);
                   type="button"
                   onClick={() => isDealFlowAvailable && setShowDealDialog(true)}
                   disabled={!isDealFlowAvailable}
-                  style={{ border: '1px solid rgba(15,76,129,0.14)', background: isDealFlowAvailable ? 'rgba(240,249,248,0.96)' : '#F8FAFC', color: isDealFlowAvailable ? colors.primary : '#94A3B8', borderRadius: '14px', padding: '10px 14px', cursor: isDealFlowAvailable ? 'pointer' : 'default', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '8px' }}
+                  style={{ border: `1px solid ${appTheme.border}`, background: isDealFlowAvailable ? '#f8fafc' : '#f3f4f6', color: isDealFlowAvailable ? colors.primary : '#94A3B8', borderRadius: '12px', padding: '10px 14px', cursor: isDealFlowAvailable ? 'pointer' : 'default', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}
                 >
                   <ShieldCheck size={16} /> Ask borrower to confirm
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowDeleteConversationDialog(true)}
-                  style={{ border: '1px solid rgba(244,63,94,0.14)', background: '#FFF1F2', color: '#E11D48', borderRadius: '14px', padding: '10px 12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '700' }}
+                  style={{ border: `1px solid ${appTheme.border}`, background: '#ffffff', color: '#b42318', borderRadius: '12px', padding: '10px 12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '600' }}
                 >
                   <Trash2 size={16} /> Delete
                 </button>
               </div>
             </header>
 
-            <div ref={scrollRef} className="kin-scrollbar" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '24px 26px', background: 'linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 100%)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div ref={scrollRef} className="kin-scrollbar" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '24px 26px', background: '#ffffff', display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {messages.map((message, i) => {
                 const isMine = message.sender_username === userName;
                 const senderPic = profileMap[message.sender_username]?.profilePic || message.sender_profile_pic || getCachedProfileByUsername(message.sender_username)?.profilePic || '';
@@ -567,8 +563,8 @@ setSearchResults(results);
 
                   return (
                     <div key={i} style={{ width: '100%', display: 'flex', justifyContent: isMine ? 'flex-end' : 'flex-start' }}>
-                      <div style={{ maxWidth: '76%', background: isConfirmed ? 'linear-gradient(135deg, rgba(16,185,129,0.12) 0%, rgba(87,197,182,0.18) 100%)' : 'linear-gradient(135deg, rgba(15,76,129,0.08) 0%, rgba(87,197,182,0.12) 100%)', border: `1px solid ${isConfirmed ? 'rgba(16,185,129,0.24)' : 'rgba(15,76,129,0.14)'}`, borderRadius: '24px', padding: '16px 18px', boxShadow: '0 12px 24px rgba(15,23,42,0.05)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', color: isConfirmed ? '#047857' : '#0F4C81' }}>
+                      <div style={{ maxWidth: '76%', background: '#f8fafc', border: `1px solid ${appTheme.border}`, borderRadius: '18px', padding: '16px 18px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', color: isConfirmed ? '#166534' : appTheme.primary }}>
                           <ShieldCheck size={16} />
                           <span style={{ fontWeight: '800', fontSize: '13px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
                             {isConfirmed ? 'Deal confirmed' : 'Deal confirmation'}
@@ -592,7 +588,7 @@ setSearchResults(results);
                             type="button"
                             onClick={() => handleConfirmDeal(deal)}
                             disabled={processingDealKey === dealKey}
-                            style={{ marginTop: '14px', border: 'none', background: 'linear-gradient(135deg, #0F4C81 0%, #1A5F7A 58%, #57C5B6 100%)', color: 'white', borderRadius: '14px', padding: '10px 14px', fontWeight: '700', cursor: processingDealKey === dealKey ? 'default' : 'pointer' }}
+                            style={{ marginTop: '14px', border: 'none', background: appTheme.button, color: 'white', borderRadius: '12px', padding: '10px 14px', fontWeight: '700', cursor: processingDealKey === dealKey ? 'default' : 'pointer' }}
                           >
                             {processingDealKey === dealKey ? 'Confirming...' : 'Borrower confirm deal'}
                           </button>
@@ -611,14 +607,13 @@ setSearchResults(results);
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: isMine ? 'flex-end' : 'flex-start' }}>
                         <span style={{ fontSize: '11px', color: '#94A3B8', marginBottom: '6px', padding: '0 4px' }}>{getDisplayNameLabel(message.sender_username)}</span>
                         <div style={{
-                          background: isMine ? 'linear-gradient(135deg, #0F4C81 0%, #1A5F7A 55%, #57C5B6 100%)' : 'rgba(255,255,255,0.9)',
+                          background: isMine ? appTheme.button : '#f8fafc',
                           color: isMine ? 'white' : '#1E293B',
                           padding: '12px 16px',
-                          borderRadius: isMine ? '20px 20px 8px 20px' : '20px 20px 20px 8px',
+                          borderRadius: isMine ? '18px 18px 8px 18px' : '18px 18px 18px 8px',
                           fontSize: '14px',
                           lineHeight: 1.55,
-                          border: isMine ? 'none' : '1px solid #E2E8F0',
-                          boxShadow: '0 12px 28px rgba(15, 23, 42, 0.06)'
+                          border: isMine ? 'none' : `1px solid ${appTheme.border}`,
                         }}>
                           {message.content}
                         </div>
@@ -629,7 +624,7 @@ setSearchResults(results);
               })}
             </div>
 
-            <div style={{ padding: '18px 24px', display: 'flex', alignItems: 'center', gap: '12px', borderTop: '1px solid #EDF2F7', background: appTheme.card, backdropFilter: 'blur(16px)' }}>
+            <div style={{ padding: '18px 24px', display: 'flex', alignItems: 'center', gap: '12px', borderTop: `1px solid ${appTheme.border}`, background: appTheme.card }}>
               <div style={modernStyles.inputWrapper}>
                 <input
                   value={typedMessage}
@@ -644,18 +639,17 @@ setSearchResults(results);
               <button
                 onClick={handleSend}
                 style={{
-                  background: 'linear-gradient(135deg, #0F4C81 0%, #1A5F7A 58%, #57C5B6 100%)',
+                  background: appTheme.button,
                   color: 'white',
                   border: 'none',
                   width: '48px',
                   height: '48px',
-                  borderRadius: '16px',
+                  borderRadius: '14px',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  flexShrink: 0,
-                  boxShadow: '0 16px 28px rgba(15,76,129,0.18)'
+                  flexShrink: 0
                 }}
               >
                 <Send size={18} />
@@ -663,15 +657,12 @@ setSearchResults(results);
             </div>
           </>
         ) : (
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: '#94A3B8', background: 'linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 100%)' }}>
-            <div style={{ width: '92px', height: '92px', borderRadius: '30px', background: 'linear-gradient(135deg, rgba(15,76,129,0.08) 0%, rgba(87,197,182,0.12) 100%)', border: '1px solid #DCE8F4', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 18px 36px rgba(15, 23, 42, 0.06)' }}>
-              <MessageSquare size={40} color="#1A5F7A" />
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: appTheme.textSoft, background: '#ffffff' }}>
+            <div style={{ width: '84px', height: '84px', borderRadius: '24px', background: '#f8fafc', border: `1px solid ${appTheme.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <MessageSquare size={34} color={appTheme.primary} />
             </div>
-            <p style={{ marginTop: '18px', fontWeight: '800', fontSize: '20px', color: '#334155' }}>Your conversations land here</p>
-            <p style={{ margin: '8px 0 0', maxWidth: '320px', textAlign: 'center', lineHeight: 1.7 }}>Choose a person on the left to keep talking, confirm a deal, or start helping with a BorrowHub request.</p>
-            <div style={{ marginTop: '18px', padding: '12px 16px', borderRadius: '16px', background: 'rgba(240,249,255,0.94)', border: '1px solid rgba(148,163,184,0.16)', color: '#64748B', fontSize: '13px', fontWeight: '600' }}>
-              Online and offline status will also appear here once a chat is selected.
-            </div>
+            <p style={{ marginTop: '18px', fontWeight: '700', fontSize: '20px', color: appTheme.text }}>Select a conversation</p>
+            <p style={{ margin: '8px 0 0', maxWidth: '320px', textAlign: 'center', lineHeight: 1.7 }}>Choose a contact to view the thread.</p>
           </div>
         )}
       </div>

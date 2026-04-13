@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, MessageCircle, Trash2, Sparkles, Clock3, User } from 'lucide-react';
+import { ArrowLeft, MessageCircle, Trash2, Clock3, User } from 'lucide-react';
 import { supabase } from '../supabaseClient';
 import { fetchProfilesByUsernames, getCachedProfileByUsername, getStoredProfile } from '../utils/profileHelpers';
 import { appTheme } from '../theme';
@@ -216,48 +216,36 @@ const BorrowHub = () => {
   return (
     <div className="kin-scrollbar" style={{ background: appTheme.background, minHeight: '100vh', padding: '2rem', fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif' }}>
       <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
-        <button onClick={() => navigate('/dashboard')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.94)', border: '1px solid rgba(255,255,255,0.88)', color: colors.primary, fontWeight: '700', marginBottom: '1.5rem', cursor: 'pointer', padding: '12px 16px', borderRadius: '18px', backdropFilter: 'blur(16px)' }}>
+        <button onClick={() => navigate('/dashboard')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#ffffff', border: `1px solid ${appTheme.border}`, color: colors.primary, fontWeight: '700', marginBottom: '1.5rem', cursor: 'pointer', padding: '12px 16px', borderRadius: '14px' }}>
           <ArrowLeft size={20} /> Dashboard
         </button>
 
-        <div style={{ background: appTheme.card, borderRadius: '34px', padding: '2rem', color: '#0F172A', marginBottom: '2rem', boxShadow: '0 22px 48px rgba(15,23,42,0.12)', border: '1px solid rgba(255,255,255,0.85)', position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at top right, rgba(87,197,182,0.16), transparent 24%), radial-gradient(circle at bottom left, rgba(15,76,129,0.08), transparent 26%)' }} />
-          <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', gap: '24px', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div style={{ background: appTheme.card, borderRadius: '24px', padding: '24px', color: appTheme.text, marginBottom: '20px', boxShadow: appTheme.shadow, border: `1px solid ${appTheme.border}` }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: '24px', alignItems: 'center', flexWrap: 'wrap' }}>
             <div>
-              <p style={{ margin: '0 0 10px', textTransform: 'uppercase', letterSpacing: '0.14em', fontSize: '12px', color: '#64748B' }}>Borrow hub</p>
-              <h1 style={{ fontSize: '2.6rem', fontWeight: '800', margin: 0 }}>See what is current, then jump in fast.</h1>
-              <p style={{ margin: '12px 0 0', maxWidth: '620px', lineHeight: 1.7, color: '#475569' }}>Browse polished request cards, spot live posts quickly, and open messages when you are ready to help.</p>
+              <p style={{ margin: '0 0 10px', textTransform: 'uppercase', letterSpacing: '0.14em', fontSize: '12px', color: appTheme.textSoft, fontWeight: '700' }}>Borrow hub</p>
+              <h1 style={{ fontSize: '2.3rem', fontWeight: '700', margin: 0 }}>Current requests</h1>
+              <p style={{ margin: '12px 0 0', maxWidth: '620px', lineHeight: 1.7, color: appTheme.textMuted }}>Review active requests and open a direct conversation when needed.</p>
             </div>
-            <div style={{ minWidth: '220px', padding: '18px 20px', borderRadius: '24px', background: 'rgba(255,255,255,0.84)', border: '1px solid rgba(226,232,240,0.9)', boxShadow: '0 14px 28px rgba(15,23,42,0.06)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                <Sparkles size={18} color="#1A5F7A" />
-                <span style={{ fontWeight: '700', color: '#0F172A' }}>Live requests</span>
-              </div>
-              <div style={{ fontSize: '2rem', fontWeight: '800', color: '#1A5F7A' }}>{communityRequests.length}</div>
+            <div style={{ minWidth: '200px', padding: '16px 18px', borderRadius: '16px', background: '#f8fafc', border: `1px solid ${appTheme.border}` }}>
+              <div style={{ fontSize: '12px', color: appTheme.textSoft, textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: '700' }}>Requests</div>
+              <div style={{ fontSize: '2rem', fontWeight: '700', color: appTheme.text, marginTop: '6px' }}>{communityRequests.length}</div>
             </div>
           </div>
         </div>
 
         {messageNotifications.length > 0 && (
-          <div style={{ marginBottom: '1.6rem', padding: '16px 18px', borderRadius: '24px', background: 'linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,251,255,0.96) 100%)', border: '1px solid rgba(255,255,255,0.86)', boxShadow: '0 16px 32px rgba(15,23,42,0.08)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-              <MessageCircle size={18} color="#DC2626" />
-              <div>
-                <p style={{ margin: 0, fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#94A3B8', fontWeight: '800' }}>Borrow hub notes</p>
-                <h2 style={{ margin: '4px 0 0', fontSize: '1.1rem', color: '#0F172A' }}>Current message activity</h2>
-              </div>
-            </div>
-
+          <div style={{ marginBottom: '18px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               {messageNotifications.slice(0, 4).map((entry) => (
                 <button
                   key={`${entry.sender_username}-${entry.created_at}`}
                   type="button"
                   onClick={() => navigate(`/dashboard?tab=messages&user=${encodeURIComponent(entry.sender_username)}`)}
-                  style={{ border: '1px solid rgba(239,68,68,0.14)', background: 'rgba(254,242,242,0.94)', color: '#991B1B', borderRadius: '999px', padding: '10px 14px', fontWeight: '700', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                  style={{ border: `1px solid ${appTheme.border}`, background: '#ffffff', color: appTheme.text, borderRadius: '999px', padding: '10px 14px', fontWeight: '600', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
                 >
-                  <span style={{ width: '8px', height: '8px', borderRadius: '999px', background: '#DC2626', boxShadow: '0 0 0 4px rgba(239,68,68,0.12)' }} />
-                  {getFirstNameLabel(entry.sender_username)} sent a message
+                  <span style={{ width: '7px', height: '7px', borderRadius: '999px', background: appTheme.primary }} />
+                  {getFirstNameLabel(entry.sender_username)}
                 </button>
               ))}
             </div>
@@ -289,7 +277,7 @@ const BorrowHub = () => {
                 : 'Lend a Hand';
 
             return (
-              <div key={req.id} style={{ background: appTheme.card, padding: '2rem', borderRadius: '32px', boxShadow: '0 16px 38px rgba(15, 23, 42, 0.12)', position: 'relative', border: '1px solid rgba(255,255,255,0.84)', backdropFilter: 'blur(18px)' }}>
+              <div key={req.id} style={{ background: appTheme.card, padding: '24px', borderRadius: '22px', boxShadow: appTheme.shadowSoft, position: 'relative', border: `1px solid ${appTheme.border}` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <div style={{ width: '50px', height: '50px', borderRadius: '18px', overflow: 'hidden', background: '#E2E8F0', border: '1px solid rgba(148,163,184,0.16)' }}>
@@ -297,7 +285,7 @@ const BorrowHub = () => {
                     </div>
                     <div>
                       <div style={{ fontWeight: '700', color: colors.text }}>{getFirstNameLabel(req.username)}</div>
-                      <div style={{ fontSize: '12px', color: '#94A3B8', display: 'flex', alignItems: 'center', gap: '6px' }}><Clock3 size={12} />{requestStatus && !isDealInvolved ? 'Unavailable request' : requestStatus ? 'Active deal' : 'Current request'}</div>
+                      <div style={{ fontSize: '12px', color: appTheme.textSoft, display: 'flex', alignItems: 'center', gap: '6px' }}><Clock3 size={12} />{requestStatus && !isDealInvolved ? 'Unavailable' : requestStatus ? 'Active deal' : 'Open request'}</div>
                     </div>
                   </div>
                   {isOwn && (
@@ -326,25 +314,24 @@ const BorrowHub = () => {
 
                 <h2 style={{ fontSize: '1.32rem', margin: '0 0 10px 0', color: colors.primary }}>{req.need}</h2>
                 <div style={{ display: 'flex', gap: '8px', marginBottom: '1rem', flexWrap: 'wrap' }}>
-                  <span style={{ fontSize: '12px', background: '#F1F5F9', padding: '4px 12px', borderRadius: '20px', color: '#64748B' }}>{req.duration}</span>
-                  <span style={{ fontSize: '12px', background: 'rgba(87,197,182,0.14)', padding: '4px 12px', borderRadius: '20px', color: '#0F766E' }}>Borrower nearby</span>
+                  <span style={{ fontSize: '12px', background: '#f8fafc', padding: '4px 12px', borderRadius: '20px', color: appTheme.textMuted, border: `1px solid ${appTheme.border}` }}>{req.duration}</span>
                   {!requestStatus && (
-                    <span style={{ fontSize: '11px', background: 'rgba(239,68,68,0.12)', padding: '5px 10px', borderRadius: '999px', color: '#DC2626', fontWeight: '800', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                      Current post
+                    <span style={{ fontSize: '11px', background: '#eef2f7', padding: '5px 10px', borderRadius: '999px', color: appTheme.primary, fontWeight: '700', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                      Current
                     </span>
                   )}
                 </div>
 
                 {extraDetails && (
-                  <div style={{ background: 'rgba(15,76,129,0.06)', padding: '14px', borderRadius: '18px', marginBottom: '12px', border: '1px solid rgba(15,76,129,0.1)' }}>
-                    <p style={{ margin: '0 0 6px', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#0F4C81', fontWeight: '800' }}>Extra details</p>
-                    <p style={{ margin: 0, fontSize: '14px', color: '#475569', fontWeight: '600', lineHeight: 1.6 }}>{extraDetails}</p>
+                  <div style={{ background: '#f8fafc', padding: '14px', borderRadius: '16px', marginBottom: '12px', border: `1px solid ${appTheme.border}` }}>
+                    <p style={{ margin: '0 0 6px', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', color: appTheme.textSoft, fontWeight: '700' }}>Details</p>
+                    <p style={{ margin: 0, fontSize: '14px', color: appTheme.textMuted, fontWeight: '600', lineHeight: 1.6 }}>{extraDetails}</p>
                   </div>
                 )}
 
-                <div style={{ background: `${colors.accent}10`, padding: '14px', borderRadius: '18px', marginBottom: '1.5rem', border: '1px solid rgba(87,197,182,0.12)' }}>
-                  <p style={{ margin: '0 0 6px', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', color: colors.accent, fontWeight: '800' }}>Token of thanks</p>
-                  <p style={{ margin: 0, fontSize: '14px', color: colors.accent, fontWeight: '700', lineHeight: 1.6 }}>{tokenOfThanks || 'A kind favor in return'}</p>
+                <div style={{ background: '#f8fafc', padding: '14px', borderRadius: '16px', marginBottom: '1.5rem', border: `1px solid ${appTheme.border}` }}>
+                  <p style={{ margin: '0 0 6px', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', color: appTheme.textSoft, fontWeight: '700' }}>Thanks</p>
+                  <p style={{ margin: 0, fontSize: '14px', color: appTheme.textMuted, fontWeight: '600', lineHeight: 1.6 }}>{tokenOfThanks || 'A kind favor in return'}</p>
                 </div>
 
                 <button
@@ -359,7 +346,7 @@ const BorrowHub = () => {
                       handleLendHand(req);
                     }
                   }}
-                  style={{ width: '100%', padding: '15px', borderRadius: '20px', border: 'none', background: ((isOwn && !canOpenDealChat) || (!isOwn && !canLend)) ? '#F1F5F9' : 'linear-gradient(135deg, #0F4C81 0%, #1A5F7A 60%, #57C5B6 100%)', color: ((isOwn && !canOpenDealChat) || (!isOwn && !canLend)) ? '#94A3B8' : 'white', fontWeight: '700', cursor: ((isOwn && !canOpenDealChat) || (!isOwn && !canLend)) ? 'default' : 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', boxShadow: ((isOwn && !canOpenDealChat) || (!isOwn && !canLend)) ? 'none' : '0 14px 32px rgba(15, 76, 129, 0.2)' }}
+                  style={{ width: '100%', padding: '14px', borderRadius: '14px', border: 'none', background: ((isOwn && !canOpenDealChat) || (!isOwn && !canLend)) ? '#e5e7eb' : appTheme.button, color: ((isOwn && !canOpenDealChat) || (!isOwn && !canLend)) ? '#94A3B8' : 'white', fontWeight: '700', cursor: ((isOwn && !canOpenDealChat) || (!isOwn && !canLend)) ? 'default' : 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}
                 >
                   <MessageCircle size={18} /> {buttonLabel}
                 </button>

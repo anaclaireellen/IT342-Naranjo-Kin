@@ -1,0 +1,17 @@
+export const appTheme = {
+  background: 'radial-gradient(circle at top left, rgba(24,151,145,0.26), transparent 24%), radial-gradient(circle at top right, rgba(98,232,220,0.24), transparent 24%), linear-gradient(180deg, #e8fffd 0%, #ddf8f5 48%, #eaf3ff 100%)',
+  shellBackground: 'linear-gradient(135deg, #0f6e77 0%, #18a7a2 54%, #74ebe0 100%)',
+  primary: '#0f7580',
+  primaryStrong: '#0b5a63',
+  accent: '#31d6c8',
+  accentSoft: '#c8fbf5',
+  text: '#111827',
+  textMuted: '#5b6472',
+  textSoft: '#8a94a6',
+  border: '#d7dee8',
+  card: '#ffffff',
+  cardAlt: 'linear-gradient(135deg, rgba(15,117,128,0.16) 0%, rgba(49,214,200,0.28) 100%)',
+  shadow: '0 20px 44px rgba(15,23,42,0.12)',
+  shadowSoft: '0 14px 30px rgba(15,23,42,0.1)',
+  button: 'linear-gradient(135deg, #0b5a63 0%, #1298a0 56%, #31d6c8 100%)',
+};

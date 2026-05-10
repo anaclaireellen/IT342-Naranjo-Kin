@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
-import Landing from './components/Landing';
-import Login from './components/Login';
-import Register from './components/Register';
-import Dashboard from './components/Dashboard';
-import BorrowHub from './components/BorrowHub'; 
-import RequestItem from './components/RequestItem';
-import ProfileSettings from './components/ProfileSettings';
+import Landing from './features/auth/Landing';
+import Login from './features/auth/Login';
+import Register from './features/auth/Register';
+import Dashboard from './features/dashboard/Dashboard';
+import BorrowHub from './features/borrowing/BorrowHub';
+import RequestItem from './features/borrowing/RequestItem';
+import ProfileSettings from './features/profile/ProfileSettings';
 
 function App() {
   // Use localStorage to keep the user logged in even if they refresh the page
